@@ -1,0 +1,23 @@
+{
+  "name": "antikirra/cookies-builder",
+  "minimum-stability": "dev",
+  "type": "library",
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "Antikirra\\Cookies\\": "./src"
+    }
+  },
+  "authors": [
+    {
+      "name": "Kirill Tkachenko",
+      "email": "antikirra@gmail.com"
+    }
+  ],
+  "require": {
+    "php": "^5.6 || ^7.0 || ^8.0"
+  },
+  "config": {
+    "sort-packages": true
+  }
+}
