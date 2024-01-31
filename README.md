@@ -1,4 +1,6 @@
 # Simple Cookies Builder
+![Packagist Dependency Version](https://img.shields.io/packagist/dependency-v/antikirra/cookies-builder/php)
+![Packagist Version](https://img.shields.io/packagist/v/antikirra/cookies-builder)
 
 ## Install
 
