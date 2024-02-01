@@ -29,5 +29,5 @@ $builder = \Antikirra\Cookies\Builder::remove('token');
 
 $header = $builder->build();
 
-echo $header; // token=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT
+echo $header; // token=deleted; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT
 ```

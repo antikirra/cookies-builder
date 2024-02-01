@@ -75,7 +75,7 @@ final class Builder
 
     public static function remove($name)
     {
-        $self = new self($name, '');
+        $self = new self($name, 'deleted');
         $expires = DateTimeImmutable::createFromFormat('Y-m-d H:i:s', '1970-01-01 00:00:00', new DateTimeZone('UTC'));
         $self->expires($expires);
 
