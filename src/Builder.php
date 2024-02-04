@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Antikirra\Cookies;
 
 use DateTimeImmutable;
@@ -8,72 +10,27 @@ use DateTimeZone;
 
 final class Builder
 {
-    /**
-     * @var string
-     */
-    private $name;
+    private string $name;
+    private string $value;
+    private string $path;
+    private ?DateTimeInterface $expires = null;
+    private string $domain;
+    private bool $secure = true;
+    private bool $httpOnly = true;
+    private ?SameSite $_sameSite = null;
 
-    /**
-     * @var string
-     */
-    private $value;
-
-    /**
-     * @var string
-     */
-    private $_path;
-
-    /**
-     * @var DateTimeInterface|null
-     */
-    private $_expires;
-
-    /**
-     * @var string
-     */
-    private $_domain;
-
-    /**
-     * @var bool
-     */
-    private $_secure;
-
-    /**
-     * @var bool
-     */
-    private $_hostOnly;
-
-    /**
-     * @var bool
-     */
-    private $_httpOnly;
-
-    /**
-     * @var SameSite|null
-     */
-    private $_sameSite;
-
-    /**
-     * @param string $name
-     * @param string $value
-     */
-    private function __construct($name, $value)
+    private function __construct(string $name, string $value)
     {
         $this->name = $name;
         $this->value = $value;
     }
 
-    /**
-     * @param string $name
-     * @param string $value
-     * @return self
-     */
-    public static function create($name, $value = '')
+    public static function create(string $name, string $value = ''): self
     {
         return new self($name, $value);
     }
 
-    public static function remove($name)
+    public static function remove(string $name): self
     {
         $self = new self($name, '');
         $expires = DateTimeImmutable::createFromFormat('U', '0', new DateTimeZone('UTC'));
@@ -82,107 +39,69 @@ final class Builder
         return $self;
     }
 
-    /**
-     * @param string $value
-     * @return $this
-     */
-    public function path($value)
+    public function path(string $value): self
     {
-        $this->_path = $value;
+        $this->path = $value;
         return $this;
     }
 
-    /**
-     * @param DateTimeInterface|null $value
-     * @return $this
-     */
-    public function expires(DateTimeInterface $value = null)
+    public function expires(?DateTimeInterface $value): self
     {
-        if (null !== $value) {
-            $this->_expires = $value;
+        if ($value instanceof DateTimeInterface) {
+            $this->expires = $value;
         }
 
         return $this;
     }
 
-    /**
-     * @param string $value
-     * @return self
-     */
-    public function domain($value)
+    public function domain(string $value): self
     {
-        $this->_domain = $value;
+        $this->domain = $value;
         return $this;
     }
 
-    /**
-     * @param bool $value
-     * @return self
-     */
-    public function secure($value = true)
+    public function secure(bool $value = true): self
     {
-        $this->_secure = $value;
+        $this->secure = $value;
         return $this;
     }
 
-    /**
-     * @param bool $value
-     * @return self
-     */
-    public function httpOnly($value = true)
+    public function httpOnly(bool $value = true): self
     {
-        $this->_httpOnly = $value;
+        $this->httpOnly = $value;
         return $this;
     }
 
-    /**
-     * @param bool $value
-     * @return self
-     */
-    public function hostOnly($value = true)
+    public function sameSite(?SameSite $value): self
     {
-        $this->_hostOnly = $value;
+        if ($value instanceof SameSite) {
+            $this->_sameSite = $value;
+        }
+
         return $this;
     }
 
-    /**
-     * @param SameSite $value
-     * @return self
-     */
-    public function sameSite(SameSite $value = null)
-    {
-        $this->_sameSite = $value;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function build()
+    public function build(): string
     {
         $parts = [];
 
         $parts[] = urlencode($this->name) . '=' . urlencode($this->value);
 
-        if (!empty($this->_domain)) {
-            $parts[] = "Domain={$this->_domain}";
+        if (!empty($this->domain)) {
+            $parts[] = "Domain={$this->domain}";
         }
 
-        $parts[] = 'Path=' . (!empty($this->_path) ? $this->_path : '/');
+        $parts[] = 'Path=' . (!empty($this->path) ? $this->path : '/');
 
-        if ($this->_expires instanceof DateTimeInterface) {
-            $parts[] = 'Expires=' . ($this->_expires->format('D, d M Y H:i:s \G\M\T'));
+        if ($this->expires instanceof DateTimeInterface) {
+            $parts[] = 'Expires=' . $this->expires->format('D, d M Y H:i:s \G\M\T');
         }
 
-        if ($this->_secure === true) {
+        if ($this->secure) {
             $parts[] = 'Secure';
         }
 
-        if ($this->_hostOnly === true) {
-            $parts[] = 'HostOnly';
-        }
-
-        if ($this->_httpOnly === true) {
+        if ($this->httpOnly) {
             $parts[] = 'HttpOnly';
         }
 
@@ -193,10 +112,7 @@ final class Builder
         return implode('; ', $parts);
     }
 
-    /**
-     * @return string
-     */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->build();
     }

@@ -1,11 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Antikirra\Cookies;
 
 abstract class SameSite
 {
-    /**
-     * @return string
-     */
-    abstract public function __toString();
+    abstract public function __toString(): string;
 }

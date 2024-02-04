@@ -1,13 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Antikirra\Cookies;
 
 final class SateSiteStrict extends SameSite
 {
-    /**
-     * @return string
-     */
-    public function __toString()
+    public function __toString(): string
     {
         return 'Strict';
     }
