@@ -6,7 +6,7 @@
 ## Install
 
 ```console
-composer require antikirra/cookies-builder
+composer require antikirra/cookies-builder:^2.0
 ```
 
 ## Basic usage
